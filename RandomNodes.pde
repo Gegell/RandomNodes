@@ -37,23 +37,7 @@ void mouseClicked() {
       break;
     }
   }
-  if (activeId >= 0) {
-    IntList nodeConnections = getConnections(activeId, new IntList());
-    setAllNodeColors(color(100));
-    print("Active id " + activeId + " has the connections: ");
-    for (int id : nodeConnections) {
-      if (id != activeId) {
-        nodes[id].nodeColor = color(18, 231, 145);
-        connectedCount++;
-      }
-      print(id + ", ");
-    }
-    nodes[activeId].nodeColor = color(242,179,85);
-  } else {
-    for (Node node : nodes) {node.nodeColor = node.generatedColor;}
-    print("Deselected all nodes");
-  }
-  println();
+  markSelected();
 }
 
 void keyPressed() {
@@ -82,12 +66,15 @@ void keyPressed() {
       break;
     case 74: //j - increase node count
       numNodes += 10;
-      GenNewMap();
+      GenNewMap(); 
       println("Increased nodes to " + numNodes);
       break;
     case 78: //n - decrease node count
       if (numNodes > 10) {
         numNodes -= 10;
+        if (activeId > numNodes) {
+          activeId = numNodes - 1;
+        }
         GenNewMap();
         println("Decreased nodes to " + numNodes);
       }
@@ -103,7 +90,6 @@ void keyPressed() {
 }
 
 void GenNewMap() {
-  activeId = -1;
   nodes = new Node[numNodes];
   connections = new Connection(nodes);
   for (int i = 0; i < numNodes; i++) {
@@ -111,8 +97,9 @@ void GenNewMap() {
   }
   for (Node node : nodes) {
     node.SetNewPosition();
-    node.SetNewConnections(); //<>//
+    node.SetNewConnections();
   }
+  markSelected();
 }
 
 void GenNewSeed() {
@@ -143,6 +130,26 @@ void setAllNodeColors(color setTo) {
   for (Node node : nodes) {
     node.nodeColor = setTo;
   }
+}
+
+void markSelected() {
+  if (activeId >= 0) {
+    IntList nodeConnections = getConnections(activeId, new IntList());
+    setAllNodeColors(color(100));
+    print("Active id " + activeId + " has the connections: ");
+    for (int id : nodeConnections) {
+      if (id != activeId) {
+        nodes[id].nodeColor = color(18, 231, 145);
+        connectedCount++;
+      }
+      print(id + ", ");
+    }
+    nodes[activeId].nodeColor = color(242,179,85);
+  } else {
+    for (Node node : nodes) {node.nodeColor = node.generatedColor;}
+    print("Deselected all nodes");
+  }
+  println();
 }
 
 float averageNodeConnections() {

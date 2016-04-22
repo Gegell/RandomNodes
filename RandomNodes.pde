@@ -52,6 +52,9 @@ void keyPressed() {
       showStats = !showStats;
       println("Show stats: " + showStats);
       break;
+    case 67: //c
+      showConnections = !showConnections;
+      break;
     case 72: //h - increase max connections
       maxNodes++;
       GenNewMap();
@@ -80,11 +83,9 @@ void keyPressed() {
       }
       break;
     case 75: //k
-    
+
     case 77: //m
-    
-    case 67: //c
-      showConnections = !showConnections;
+      
     /*case 69: //e
       editMode = !editMode;
       println("Toggled edit to " + editMode);*/

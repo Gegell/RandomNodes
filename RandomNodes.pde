@@ -5,9 +5,11 @@ int activeId = -1;
 int connectedCount;
 Node[] nodes;
 Connection connections;
+Utils Utils = new Utils();
 boolean showStats = true;
 boolean showConnections = true;
 color bufferColor;
+
 
 
 void setup() {
@@ -54,6 +56,7 @@ void keyPressed() {
       break;
     case 67: //c
       showConnections = !showConnections;
+      println("Show connections: " + showConnections);
       break;
     case 72: //h - increase max connections
       maxNodes++;
@@ -82,10 +85,10 @@ void keyPressed() {
         println("Decreased nodes to " + numNodes);
       }
       break;
-    case 75: //k
-
     case 77: //m
-      
+      Utils.toggleModeId();
+      println("Set mode to " + Utils.getModeName(Utils.modeId));
+      break;
     /*case 69: //e
       editMode = !editMode;
       println("Toggled edit to " + editMode);*/
@@ -116,8 +119,10 @@ void DisplayStats() {
   textSize(textSize);
   textLeading(textSize);
   String information = "Seed: " + hex(seed) + " \n";
-  information += "Avg. Connections: " + averageNodeConnections() + "\n";
-  information += "Max. Connections: " + maxNodes + "\n";
+  information += "Mode: " + Utils.getModeName(Utils.modeId) + "\n";
+  information += "Total connections: " + connections.connections.size() + "\n";
+  information += "Avg. connections: " + averageNodeConnections() + "\n";
+  information += "Max connections: " + maxNodes + "\n";
   information += "Nodes: " + numNodes + "\n";
   if (activeId >= 0) {
     information += "\n";

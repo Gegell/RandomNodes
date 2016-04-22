@@ -12,7 +12,6 @@ class Node {
   Node(Node allNodes[], float maxConnections, int id, Connection connections) {
     this.allNodes = allNodes;
     this.maxNumConnections = int(maxConnections);//int(random(maxConnections + 1));
-    //this.nodeSize = 3* connections;
     this.id = id;
     this.allConnections = connections;
   }
@@ -43,7 +42,7 @@ class Node {
         }
       }
       timeout++;
-      if (50 + timeout > maxConnection) {break;}
+      if (timeout > maxConnection + 100) {break;}
     } 
   }
   

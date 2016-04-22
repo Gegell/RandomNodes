@@ -139,18 +139,19 @@ void markSelected() {
   if (activeId >= 0) {
     IntList nodeConnections = getConnections(activeId, new IntList());
     setAllNodeColors(color(100));
-    print("Active id " + activeId + " has the connections: ");
+    print("Activated id " + activeId);
+    //print(" has the connections: ");
     for (int id : nodeConnections) {
       if (id != activeId) {
         nodes[id].nodeColor = color(18, 231, 145);
         connectedCount++;
       }
-      print(id + ", ");
+      //print(id + ", ");
     }
     nodes[activeId].nodeColor = color(242,179,85);
   } else {
     for (Node node : nodes) {node.nodeColor = node.generatedColor;}
-    print("Deselected all nodes");
+    print("Deactivated all nodes");
   }
   println();
 }

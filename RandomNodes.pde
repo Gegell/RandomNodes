@@ -31,7 +31,6 @@ void draw() {
 
 void mouseClicked() {
   activeId = -1;
-  connectedCount = 0;
   for (Node node : nodes) {
     if (dist(node.coord.x, node.coord.y, mouseX, mouseY) < node.nodeSize/2) {
       activeId = node.id;
@@ -136,6 +135,7 @@ void setAllNodeColors(color setTo) {
 }
 
 void markSelected() {
+  connectedCount = 0;
   if (activeId >= 0) {
     IntList nodeConnections = getConnections(activeId, new IntList());
     setAllNodeColors(color(100));

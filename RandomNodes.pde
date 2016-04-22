@@ -40,26 +40,30 @@ void mouseClicked() {
   }
   if (activeId != prevActiveId) {
     markSelected();
+    if (activeId >= 0) {
+      println("Activated id " + activeId);
+    } else {println("Deactivated all nodes");}
   }
 }
 
 void keyPressed() {
   //println(keyCode);
-  switch(keyCode) {
-    case 32: //Space - Respawn
+  if (key != CODED) {
+  switch(key) {
+    case ' ': //Space - Respawn
       println("Respawn");
       GenNewSeed();
       GenNewMap();
       break;
-    case 73: //i - toggle information
+    case 'i': //i - toggle information
       showStats = !showStats;
       println("Show stats: " + showStats);
       break;
-    case 67: //c - show/hide the connections
+    case 'c': //c - show/hide the connections
       showConnections = !showConnections;
       println("Show connections: " + showConnections);
       break;
-    case 83: //s - node size after connection count
+    case 's': //s - node size after connection count
       resizeNodesAfterConnections = !resizeNodesAfterConnections;
       println("Resize nodes after connections: " + resizeNodesAfterConnections);
       if (resizeNodesAfterConnections) {
@@ -68,24 +72,24 @@ void keyPressed() {
         for (Node node : nodes) {node.nodeSize = 16;}
       }
       break;
-    case 72: //h - increase max connections
+    case 'h': //h - increase max connections
       maxNodes++;
       GenNewMap();
       println("Increased max connections to " + maxNodes);
       break;
-    case 66: //b - decrease max connections
+    case 'b': //b - decrease max connections
       if (maxNodes > 0) {
         maxNodes--;
         GenNewMap();
         println("Decreased max connections to " + maxNodes);
       }
       break;
-    case 74: //j - increase node count
+    case 'j': //j - increase node count
       numNodes += 10;
-      GenNewMap(); 
+      GenNewMap();
       println("Increased nodes to " + numNodes);
       break;
-    case 78: //n - decrease node count
+    case 'n': //n - decrease node count
       if (numNodes > 10) {
         numNodes -= 10;
         if (activeId > numNodes) {
@@ -95,14 +99,16 @@ void keyPressed() {
         println("Decreased nodes to " + numNodes);
       }
       break;
-    case 77: //m
+    case 'm': //m - mode toggle
       Utils.toggleModeId();
       markSelected();
       println("Set mode to " + Utils.getModeName(Utils.modeId));
       break;
+    case 'f': //f - for file import
     /*case 69: //e
       editMode = !editMode;
       println("Toggled edit to " + editMode);*/
+    }
   }
 }
 
@@ -156,20 +162,15 @@ void markSelected() {
   if (activeId >= 0) {
     IntList nodeConnections = getConnections(activeId);
     setAllNodeColors(color(100));
-    print("Activated id " + activeId);
-    //print(" has the connections: ");
     for (int id : nodeConnections) {
       if (id != activeId) {
         nodes[id].nodeColor = color(18, 231, 145);
       }
-      //print(id + ", ");
     }
     nodes[activeId].nodeColor = color(242,179,85);
   } else {
     for (Node node : nodes) {node.nodeColor = node.generatedColor;}
-    print("Deactivated all nodes");
   }
-  println();
 }
 
 void resizeNodes() {

@@ -1,7 +1,7 @@
 class Node {
   Node allNodes[];
   Connection allConnections;
-  int[] related = new int[0];
+  int numConnected = 0;
   int maxNumConnections;
   int id;
   int nodeSize = 16;
@@ -11,7 +11,7 @@ class Node {
   
   Node(Node allNodes[], float maxConnections, int id, Connection connections) {
     this.allNodes = allNodes;
-    this.maxNumConnections = int(maxConnections);//int(random(maxConnections + 1));
+    this.maxNumConnections = int(random(maxConnections + 1));
     this.id = id;
     this.allConnections = connections;
   }
@@ -30,13 +30,13 @@ class Node {
     int newConnections = 0;
     int maxConnection = allNodes.length;
     int timeout = 0;
-    while (newConnections < maxNumConnections && related.length < maxNumConnections) {
+    while (newConnections < maxNumConnections && numConnected < maxNumConnections) {
       int newConnection = int(random(maxConnection));
       if (newConnection != this.id) {
         int[] newConnectionList = {this.id, newConnection}; //<>//
         if (allConnections.addConnection(newConnectionList)) {
-          related = append(related, newConnection);
-          append(allNodes[newConnection].related, this.id);
+          numConnected++;
+          allNodes[newConnection].numConnected++;
           newConnections++;
           timeout = 0;
         }

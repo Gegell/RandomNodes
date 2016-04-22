@@ -2,12 +2,12 @@ int numNodes = 10;
 int maxNodes = 1;
 int seed;
 int activeId = -1;
-int connectedCount;
 Node[] nodes;
 Connection connections;
 Utils Utils = new Utils();
 boolean showStats = true;
 boolean showConnections = true;
+boolean resizeNodesAfterConnections = false;
 color bufferColor;
 
 
@@ -54,9 +54,18 @@ void keyPressed() {
       showStats = !showStats;
       println("Show stats: " + showStats);
       break;
-    case 67: //c
+    case 67: //c - show/hide the connections
       showConnections = !showConnections;
       println("Show connections: " + showConnections);
+      break;
+    case 83: //s - node size after connection count
+      resizeNodesAfterConnections = !resizeNodesAfterConnections;
+      println("Resize nodes after connections: " + resizeNodesAfterConnections);
+      if (resizeNodesAfterConnections) {
+        resizeNodes();
+      } else {
+        for (Node node : nodes) {node.nodeSize = 16;}
+      }
       break;
     case 72: //h - increase max connections
       maxNodes++;
@@ -105,6 +114,7 @@ void GenNewMap() {
     node.SetNewPosition();
     node.SetNewConnections();
   }
+  if (resizeNodesAfterConnections) {resizeNodes();}
   markSelected();
 }
 
@@ -118,7 +128,7 @@ void DisplayStats() {
   fill(0);
   textSize(textSize);
   textLeading(textSize);
-  String information = "Seed: " + hex(seed) + " \n";
+  String information = "Seed: " + hex(seed) + "\n";
   information += "Mode: " + Utils.getModeName(Utils.modeId) + "\n";
   information += "Total connections: " + connections.connections.size() + "\n";
   information += "Avg. connections: " + averageNodeConnections() + "\n";
@@ -129,7 +139,7 @@ void DisplayStats() {
     information += "Id: " + activeId + "\n";
     information += "X: " + round(nodes[activeId].coord.x) + "\n";
     information += "Y: " + round(nodes[activeId].coord.y) + "\n";
-    information += "Connected: " + connectedCount + "\n";
+    information += "Connected: " + nodes[activeId].numConnected + "\n";
   }
   text(information, 4, textSize);
 }
@@ -141,7 +151,6 @@ void setAllNodeColors(color setTo) {
 }
 
 void markSelected() {
-  connectedCount = 0;
   if (activeId >= 0) {
     IntList nodeConnections = getConnections(activeId, new IntList());
     setAllNodeColors(color(100));
@@ -150,7 +159,6 @@ void markSelected() {
     for (int id : nodeConnections) {
       if (id != activeId) {
         nodes[id].nodeColor = color(18, 231, 145);
-        connectedCount++;
       }
       //print(id + ", ");
     }
@@ -160,6 +168,12 @@ void markSelected() {
     print("Deactivated all nodes");
   }
   println();
+}
+
+void resizeNodes() {
+  for (Node node : nodes) {
+    node.nodeSize = node.numConnected * 3 + 5;
+  }
 }
 
 float averageNodeConnections() {

@@ -171,8 +171,10 @@ void markSelected() {
 }
 
 void resizeNodes() {
+  float maxNodeConnections = 0;
+  for (Node node : nodes) {maxNodeConnections = max(maxNodeConnections, node.numConnected);}
   for (Node node : nodes) {
-    node.nodeSize = node.numConnected * 3 + 5;
+    node.nodeSize = int(8 + 32 * (node.numConnected / maxNodeConnections));
   }
 }
 

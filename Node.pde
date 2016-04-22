@@ -5,6 +5,7 @@ class Node {
   int maxNumConnections;
   int id;
   int nodeSize = 16;
+  IntList connections = new IntList();
   PVector coord = new PVector();
   color generatedColor = color(random(230), random(230), random(230), random(150, 255));
   color nodeColor = generatedColor;
@@ -30,14 +31,15 @@ class Node {
     int newConnections = 0;
     int maxConnection = allNodes.length;
     int timeout = 0;
-    while (newConnections < maxNumConnections && numConnected < maxNumConnections) {
+    while (numConnected < maxNumConnections) {
       int newConnection = int(random(maxConnection));
       if (newConnection != this.id) {
         int[] newConnectionList = {this.id, newConnection}; //<>//
         if (allConnections.addConnection(newConnectionList)) {
           numConnected++;
           allNodes[newConnection].numConnected++;
-          newConnections++;
+          connections.append(newConnection);
+          allNodes[newConnection].connections.append(this.id);
           timeout = 0;
         }
       }

@@ -10,8 +10,6 @@ boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
 color bufferColor;
 
-
-
 void setup() {
   GenNewSeed();
   surface.setResizable(true);
@@ -32,6 +30,7 @@ void draw() {
 }
 
 void mouseClicked() {
+  int prevActiveId = activeId;
   activeId = -1;
   for (Node node : nodes) {
     if (dist(node.coord.x, node.coord.y, mouseX, mouseY) < node.nodeSize/2) {
@@ -39,7 +38,9 @@ void mouseClicked() {
       break;
     }
   }
-  markSelected();
+  if (activeId != prevActiveId) {
+    markSelected();
+  }
 }
 
 void keyPressed() {
@@ -96,6 +97,7 @@ void keyPressed() {
       break;
     case 77: //m
       Utils.toggleModeId();
+      markSelected();
       println("Set mode to " + Utils.getModeName(Utils.modeId));
       break;
     /*case 69: //e
@@ -152,7 +154,7 @@ void setAllNodeColors(color setTo) {
 
 void markSelected() {
   if (activeId >= 0) {
-    IntList nodeConnections = getConnections(activeId, new IntList());
+    IntList nodeConnections = getConnections(activeId);
     setAllNodeColors(color(100));
     print("Activated id " + activeId);
     //print(" has the connections: ");
@@ -183,12 +185,19 @@ float averageNodeConnections() {
   return avg;
 }
 
-IntList getConnections(int startId, IntList foundConnections) {
-  for (int i = 0; i < connections.connections.size(); i++) {
-    IntList checkConnection = connections.connections.get(i);
-    if (checkConnection.hasValue(startId)) {
-      for (int item : checkConnection) {
-        if (!foundConnections.hasValue(item) && item != startId) {foundConnections.append(item);}
+IntList getConnections(int startId) {
+  IntList foundConnections = new IntList();
+  for (int connectionId : nodes[startId].connections) {
+    if (!foundConnections.hasValue(connectionId)) {
+      foundConnections.append(connectionId);
+    }
+  }
+  if (Utils.modeId == 1) {
+    for (int subNodeId : foundConnections) {
+      for (int subNodeConnectionId : nodes[subNodeId].connections) {
+        if (!foundConnections.hasValue(subNodeConnectionId)) {
+          foundConnections.append(subNodeConnectionId);
+        }
       }
     }
   }

@@ -6,6 +6,7 @@ int connectedCount;
 Node[] nodes;
 Connection connections;
 boolean showStats = true;
+boolean showConnections = true;
 color bufferColor;
 
 
@@ -23,7 +24,7 @@ void draw() {
   for (Node node : nodes) {
     node.Update();
   }
-  connections.DrawConnections();
+  if (showConnections) {connections.DrawConnections();}
   if (showStats) {DisplayStats();}
 
 }
@@ -83,6 +84,8 @@ void keyPressed() {
     
     case 77: //m
     
+    case 67: //c
+      showConnections = !showConnections;
     /*case 69: //e
       editMode = !editMode;
       println("Toggled edit to " + editMode);*/

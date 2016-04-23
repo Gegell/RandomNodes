@@ -1,0 +1,15 @@
+Only if a line is within a {} it will get used ;D
+{
+key_respawn=32
+key_toggle_information=i
+key_toggle_connections=c
+key_toggle_resize_nodes=r
+key_toggle_connection_draw_mode=m
+key_increase_max_connections=h
+key_decrease_max_connections=b
+key_increase_node_count=j
+key_decrease_node_count=n
+key_file_import=f
+key_file_export=s
+key_reload_config=f2
+}

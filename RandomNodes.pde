@@ -2,15 +2,17 @@ int numNodes = 10;
 int maxNodes = 1;
 int seed;
 int activeId = -1;
-Node[] nodes;
-Connection connections;
-Utils Utils;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
 color bufferColor;
+Node[] nodes;
+Connection connections;
+Utils Utils;
+Input Input = new Input();
 
 void setup() {
+  Input.loadConfig();
   GenNewSeed();
   surface.setResizable(true);
   surface.setTitle("Random Nodes");
@@ -47,73 +49,8 @@ void mouseClicked() {
 }
 
 void keyPressed() {
-  //println(keyCode);
-  if (key != CODED) {
-  switch(key) {
-    case ' ': //Space - Respawn
-      println("Respawn");
-      GenNewSeed();
-      GenNewMap();
-      break;
-    case 'i': //i - toggle information
-      showStats = !showStats;
-      println("Show stats: " + showStats);
-      break;
-    case 'c': //c - show/hide the connections
-      showConnections = !showConnections;
-      println("Show connections: " + showConnections);
-      break;
-    case 'r': //r - node size after connection count
-      resizeNodesAfterConnections = !resizeNodesAfterConnections;
-      println("Resize nodes after connections: " + resizeNodesAfterConnections);
-      if (resizeNodesAfterConnections) {
-        resizeNodes();
-      } else {
-        for (Node node : nodes) {node.nodeSize = 16;}
-      }
-      break;
-    case 'h': //h - increase max connections
-      maxNodes++;
-      GenNewMap();
-      println("Increased max connections to " + maxNodes);
-      break;
-    case 'b': //b - decrease max connections
-      if (maxNodes > 0) {
-        maxNodes--;
-        GenNewMap();
-        println("Decreased max connections to " + maxNodes);
-      }
-      break;
-    case 'j': //j - increase node count
-      numNodes += 10;
-      GenNewMap();
-      println("Increased nodes to " + numNodes);
-      break;
-    case 'n': //n - decrease node count
-      if (numNodes > 10) {
-        numNodes -= 10;
-        if (activeId > numNodes) {
-          activeId = numNodes - 1;
-        }
-        GenNewMap();
-        println("Decreased nodes to " + numNodes);
-      }
-      break;
-    case 'm': //m - mode toggle
-      Utils.toggleModeId();
-      markSelected();
-      println("Set mode to " + Utils.getModeName(Utils.modeId));
-      break;
-    case 'f': //f - for file import
-      break;
-    case 's': //s - for file export
-      Utils.saveToFile();
-      break;
-    /*case 69: //e
-      editMode = !editMode;
-      println("Toggled edit to " + editMode);*/
-    }
-  }
+  //println("'" + key + "': " + keyCode);
+  Input.applyChange(keyCode);
 }
 
 void GenNewMap() {

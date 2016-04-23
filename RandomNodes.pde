@@ -4,7 +4,7 @@ int seed;
 int activeId = -1;
 Node[] nodes;
 Connection connections;
-Utils Utils = new Utils();
+Utils Utils;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
@@ -63,7 +63,7 @@ void keyPressed() {
       showConnections = !showConnections;
       println("Show connections: " + showConnections);
       break;
-    case 's': //s - node size after connection count
+    case 'r': //r - node size after connection count
       resizeNodesAfterConnections = !resizeNodesAfterConnections;
       println("Resize nodes after connections: " + resizeNodesAfterConnections);
       if (resizeNodesAfterConnections) {
@@ -105,6 +105,10 @@ void keyPressed() {
       println("Set mode to " + Utils.getModeName(Utils.modeId));
       break;
     case 'f': //f - for file import
+      break;
+    case 's': //s - for file export
+      println("Saved to " + Utils.saveToFile());
+      break;
     /*case 69: //e
       editMode = !editMode;
       println("Toggled edit to " + editMode);*/
@@ -124,6 +128,7 @@ void GenNewMap() {
   }
   if (resizeNodesAfterConnections) {resizeNodes();}
   markSelected();
+  Utils = new Utils(nodes);
 }
 
 void GenNewSeed() {

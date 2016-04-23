@@ -5,7 +5,6 @@ int activeId = -1;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
-color bufferColor;
 Node[] nodes;
 Connection connections;
 Utils Utils;
@@ -18,7 +17,6 @@ void setup() {
   surface.setTitle("Random Nodes");
   size(480,320);
   GenNewMap();
-  bufferColor = nodes[0].nodeColor;
 }
 
 void draw() {

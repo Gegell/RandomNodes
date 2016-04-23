@@ -62,14 +62,14 @@ class Input{
   }
   
   void increaseNodeCount() {
-    numNodes += 10;
+    numNodes += pow(10, (floor(Utils.log10(abs(numNodes)))));
     GenNewMap();
     println("Increased nodes to " + numNodes);
   }
   
   void decreaseNodeCount() {
     if (numNodes > 10) {
-      numNodes -= 10;
+      numNodes -= pow(10, (floor(Utils.log10(abs(numNodes - 10)))));
       if (activeId > numNodes) {
         activeId = numNodes - 1;
       }

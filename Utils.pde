@@ -87,4 +87,8 @@ class Utils {
     }
     return true;
   }
+  
+  float log10(int x) {
+    return (log(x) / log(10));
+  }
 }

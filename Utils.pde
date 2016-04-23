@@ -1,6 +1,7 @@
 class Utils {
   int modeId = 0;
   boolean canOverride = true;
+  String saveFileName = "save"; //If not specified it will use the date and time
   Node[] allNodes;
   
   Utils(Node[] allNodes) {
@@ -41,7 +42,7 @@ class Utils {
       newRow.setInt("id", node.id);
       newRow.setFloat("x", node.coord.x);
       newRow.setFloat("y", node.coord.y);
-      newRow.setInt("color", node.generatedColor);
+      newRow.setString("color", hex(node.generatedColor));
       newRow.setString("connections", "[" + join(nf(node.connections.array(), 0), ", ") + "]");
     }
     String fileName = getFileName();
@@ -50,7 +51,10 @@ class Utils {
   }
   
   String getFileName() {
-    String fileName = "saves/save_" + getTimeStamp();
+    String fileName;
+    if (saveFileName == "") {
+      fileName = "saves/save_" + getTimeStamp();
+    } else {fileName = "saves/" + saveFileName;}
     if (fileExists(fileName + ".txt") && !canOverride) {
       int numFileCopys = 1;
       while (fileExists(fileName + "(" + numFileCopys + ")" + ".txt")) {

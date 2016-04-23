@@ -29,30 +29,24 @@ class Utils {
     }
   }
   
-  String saveToFile() {
-    StringList output = new StringList();
-    
+  void saveToFile() {
+    Table table = new Table();
+    table.addColumn("id");
+    table.addColumn("x");
+    table.addColumn("y");
+    table.addColumn("color");
+    table.addColumn("connections");
     for (Node node : allNodes) {
-      String nodeOutput = "N";
-      nodeOutput += node.id + " ";
-      nodeOutput += node.coord.x + ",";
-      nodeOutput += node.coord.y + " ";
-      nodeOutput += node.generatedColor + " ";
-      nodeOutput += "[";
-      int connectionCounter = 0;
-      for (int connection : node.connections) {
-        nodeOutput += connection;
-        connectionCounter++;
-        if (connectionCounter < node.connections.size()) {
-          nodeOutput += ",";
-        }
-      }
-      nodeOutput += "]";
-      output.append(nodeOutput);
+      TableRow newRow = table.addRow();
+      newRow.setInt("id", node.id);
+      newRow.setFloat("x", node.coord.x);
+      newRow.setFloat("y", node.coord.y);
+      newRow.setInt("color", node.generatedColor);
+      newRow.setString("connections", "[" + join(nf(node.connections.array(), 0), ", ") + "]");
     }
     String fileName = getFileName();
-    saveStrings(fileName, output.array());
-    return fileName;
+    saveTable(table, fileName, "csv");
+    println("Saved to \"" + fileName + "\"");
   }
   
   String getFileName() {

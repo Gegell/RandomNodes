@@ -107,7 +107,7 @@ void keyPressed() {
     case 'f': //f - for file import
       break;
     case 's': //s - for file export
-      println("Saved to " + Utils.saveToFile());
+      Utils.saveToFile();
       break;
     /*case 69: //e
       editMode = !editMode;

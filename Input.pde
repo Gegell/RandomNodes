@@ -1,18 +1,27 @@
 class Input{
   StringDict configs;
-  void applyChange(int typedKeyCode) {
-    if (int(configs.get("key_respawn")) == typedKeyCode) {regenNodes();}
-    else if(int(configs.get("key_toggle_information")) == typedKeyCode) {toggleInformation();}
-    else if(int(configs.get("key_toggle_connections")) == typedKeyCode) {toggleConnections();}
-    else if(int(configs.get("key_toggle_resize_nodes")) == typedKeyCode) {toggleResizeMode();}
-    else if(int(configs.get("key_toggle_connection_draw_mode")) == typedKeyCode) {toggleConnectionDrawMode();}
-    else if(int(configs.get("key_increase_max_connections")) == typedKeyCode) {increaseMaxConnections();}
-    else if(int(configs.get("key_decrease_max_connections")) == typedKeyCode) {decreaseMaxConnections();}
-    else if(int(configs.get("key_increase_node_count")) == typedKeyCode) {increaseNodeCount();}
-    else if(int(configs.get("key_decrease_node_count")) == typedKeyCode) {decreaseNodeCount();}
-    else if(int(configs.get("key_file_import")) == typedKeyCode) {importData();}
-    else if(int(configs.get("key_file_export")) == typedKeyCode) {exportData();}
-    else if(int(configs.get("key_reload_config")) == typedKeyCode) {loadConfig();}
+  void applyChange() {
+    if (isConfigKeyTyped("key_respawn")) {regenNodes();}
+    else if(isConfigKeyTyped("key_toggle_information")) {toggleInformation();}
+    else if(isConfigKeyTyped("key_toggle_connections")) {toggleConnections();}
+    else if(isConfigKeyTyped("key_toggle_resize_nodes")) {toggleResizeMode();}
+    else if(isConfigKeyTyped("key_toggle_edit_mode")) {toggleEditMode();}
+    else if(isConfigKeyTyped("key_toggle_connection_draw_mode")) {toggleConnectionDrawMode();}
+    else if(isConfigKeyTyped("key_increase_max_connections")) {increaseMaxConnections();}
+    else if(isConfigKeyTyped("key_decrease_max_connections")) {decreaseMaxConnections();}
+    else if(isConfigKeyTyped("key_increase_node_count")) {increaseNodeCount();}
+    else if(isConfigKeyTyped("key_decrease_node_count")) {decreaseNodeCount();}
+    else if(isConfigKeyTyped("key_file_import")) {importData();}
+    else if(isConfigKeyTyped("key_file_export")) {exportData();}
+    else if(isConfigKeyTyped("key_reload_config")) {loadConfig();}
+    else if(isConfigKeyTyped("key_reset_to_config")) {resetToConfig();}
+  }
+  
+  boolean isConfigKeyTyped(String configKey) {
+    if (!configs.hasKey(configKey)) {
+      return false;
+    }
+    return int(configs.get(configKey)) == keyCode;
   }
   
   void regenNodes() {
@@ -29,6 +38,10 @@ class Input{
   void toggleConnections() {
     showConnections = !showConnections;
     println("Show connections: " + showConnections);
+  }
+  
+  void toggleEditMode() {
+    editMode = !editMode;
   }
   
   void toggleResizeMode() {
@@ -86,6 +99,18 @@ class Input{
     Utils.saveToFile();
   }
   
+  void resetToConfig() {
+    loadConfig();
+    println("Reset to config file");
+    if (configs.hasKey("setup_show_stats")) {showStats = boolean(configs.get("setup_show_stats"));}
+    if (configs.hasKey("setup_show_connections")) {showConnections = boolean(configs.get("setup_show_connections"));}
+    if (configs.hasKey("setup_resize_nodes")) {resizeNodesAfterConnections = boolean(configs.get("setup_resize_nodes"));}
+    if (configs.hasKey("setup_edit_mode")) {editMode = boolean(configs.get("setup_edit_mode"));}
+    if (configs.hasKey("setup_number_nodes")) {numNodes = int(configs.get("setup_number_nodes"));}
+    if (configs.hasKey("setup_max_connections")) {maxNodes = int(configs.get("setup_max_connections"));}
+    GenNewMap();
+  }
+  
   void loadConfig() {
     configs = new StringDict();
     boolean isInsideBraces = false;
@@ -99,12 +124,13 @@ class Input{
         String configValue = trim(split(line,"=")[1]);
         configValue = configValue.toUpperCase();
         print(configName + ": " + configValue);
-        if (configValue.length() > 1 && configValue.charAt(0) == 'F') {
-          configValue = str(111 + int(configValue.substring(1)));
-          print(" > " + configValue);
-        }
-        if (int(configValue) == 0) {
-          configValue = str(int(configValue.charAt(0)));
+        if (configName.contains("key")) {
+          if (configValue.length() > 1 && configValue.charAt(0) == 'F') {
+            configValue = str(111 + int(configValue.substring(1)));
+          }
+          if (int(configValue) == 0) {
+            configValue = str(int(configValue.charAt(0)));
+          }
           print(" > " + configValue);
         }
         println();

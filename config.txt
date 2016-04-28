@@ -5,6 +5,7 @@ key_toggle_information=i
 key_toggle_connections=c
 key_toggle_resize_nodes=r
 key_toggle_connection_draw_mode=m
+key_toggle_edit_mode=e
 key_increase_max_connections=h
 key_decrease_max_connections=b
 key_increase_node_count=j
@@ -12,4 +13,14 @@ key_decrease_node_count=n
 key_file_import=f
 key_file_export=s
 key_reload_config=f2
+key_reset_to_config=f5
+}
+
+{
+setup_show_stats=true
+setup_show_connections=true
+setup_resize_nodes=false
+setup_edit_mode=true
+setup_number_nodes=10
+setup_max_connections=1
 }

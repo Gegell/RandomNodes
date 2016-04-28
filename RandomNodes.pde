@@ -5,9 +5,10 @@ int activeId = -1;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
+boolean editMode = true;
 Node[] nodes;
 Connection connections;
-Utils Utils;
+Utils Utils = new Utils();
 Input Input = new Input();
 
 void setup() {
@@ -29,7 +30,24 @@ void draw() {
 
 }
 
-void mouseClicked() {
+void mousePressed() {
+  activateClickedNode();
+}
+
+void mouseDragged() {
+  
+  if (editMode && activeId >= 0) {
+    nodes[activeId].coord.x = mouseX;
+    nodes[activeId].coord.y = mouseY;
+  }
+}
+
+void keyPressed() {
+  //println("'" + key + "': " + keyCode);
+  Input.applyChange();
+}
+
+boolean activateClickedNode() {
   int prevActiveId = activeId;
   activeId = -1;
   for (Node node : nodes) {
@@ -43,12 +61,9 @@ void mouseClicked() {
     if (activeId >= 0) {
       println("Activated id " + activeId);
     } else {println("Deactivated all nodes");}
+    return true;
   }
-}
-
-void keyPressed() {
-  //println("'" + key + "': " + keyCode);
-  Input.applyChange(keyCode);
+  return false;
 }
 
 void GenNewMap() {
@@ -63,7 +78,6 @@ void GenNewMap() {
   }
   if (resizeNodesAfterConnections) {resizeNodes();}
   markSelected();
-  Utils = new Utils(nodes);
 }
 
 void GenNewSeed() {
@@ -76,14 +90,18 @@ void DisplayStats() {
   fill(0);
   textSize(textSize);
   textLeading(textSize);
-  String information = "Seed: " + hex(seed) + "\n";
+  String information = "";
+  information += "Seed: " + hex(seed) + "\n";
   information += "Mode: " + Utils.getModeName(Utils.modeId) + "\n";
   information += "Total connections: " + connections.connections.size() + "\n";
   information += "Avg. connections: " + averageNodeConnections() + "\n";
   information += "Max connections: " + maxNodes + "\n";
   information += "Nodes: " + numNodes + "\n";
+  information += "\n";
+  if (editMode) {
+    information += "Edit mode active\n";
+  }
   if (activeId >= 0) {
-    information += "\n";
     information += "Id: " + activeId + "\n";
     information += "X: " + round(nodes[activeId].coord.x) + "\n";
     information += "Y: " + round(nodes[activeId].coord.y) + "\n";

@@ -4,10 +4,6 @@ class Utils {
   String saveFileName = "save"; //If not specified it will use the date and time
   Node[] allNodes;
   
-  Utils(Node[] allNodes) {
-    this.allNodes = allNodes;
-  }
-  
   String getModeName(int modeId) {
     switch(modeId) {
       case 0:
@@ -31,6 +27,7 @@ class Utils {
   }
   
   void saveToFile() {
+    allNodes = nodes;
     Table table = new Table();
     table.addColumn("id");
     table.addColumn("x");

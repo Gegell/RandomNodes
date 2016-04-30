@@ -131,10 +131,16 @@ void markSelected() {
 }
 
 void resizeNodes() {
-  float maxNodeConnections = 1;
-  for (Node node : nodes) {maxNodeConnections = max(maxNodeConnections, node.connections.size());}
+  float maxNodeConnections = nodes[0].connections.size();
+  float minNodeConnections = maxNodeConnections;
   for (Node node : nodes) {
-    node.nodeSize = int(8 + 32 * (node.connections.size() / maxNodeConnections));
+    maxNodeConnections = max(maxNodeConnections, node.connections.size());
+    minNodeConnections = min(minNodeConnections, node.connections.size());
+  }
+  if (maxNodeConnections - minNodeConnections != 0) {
+    for (Node node : nodes) {
+      node.nodeSize = int(8 + (24 * ((node.connections.size() - minNodeConnections) / (maxNodeConnections - minNodeConnections))));
+    }
   }
 }
 

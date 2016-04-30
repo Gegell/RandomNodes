@@ -91,7 +91,7 @@ void DisplayStats() {
   textSize(textSize);
   textLeading(textSize);
   String information = "";
-  information += "Seed: " + hex(seed) + "\n";
+  information += "Seed: " + hex(seed).substring(2) + "\n";
   information += "Mode: " + Utils.getModeName(Utils.modeId) + "\n";
   information += "Total connections: " + connections.connections.size() + "\n";
   information += "Avg. connections: " + averageNodeConnections() + "\n";

@@ -17,6 +17,7 @@ void setup() {
   surface.setResizable(true);
   surface.setTitle("Random Nodes");
   size(480,320);
+  rectMode(CENTER);
   GenNewMap();
 }
 

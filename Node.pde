@@ -3,6 +3,7 @@ class Node {
   Connection allConnections;
   int maxNumConnections;
   int id;
+  int type = 0;
   int nodeSize = 16;
   IntList connections = new IntList();
   PVector coord = new PVector();
@@ -23,14 +24,25 @@ class Node {
   void DrawNode() {
     noStroke();
     fill(nodeColor);
-    ellipse(coord.x, coord.y, nodeSize, nodeSize);
+    if (connections.size() == 1) {
+      type = 1;
+    }
+    switch (type) {
+      case 0:
+      default:
+        ellipse(coord.x, coord.y, nodeSize, nodeSize);
+        break;
+      case 1:
+        rect(coord.x, coord.y, nodeSize, nodeSize);
+        break;
+    }
   }
   
   void SetNewConnections() {
     int newConnections = 0;
     int maxConnection = allNodes.length;
     int timeout = 0;
-    while (connections.size() < maxNumConnections) {
+    while (connections.size() < maxNumConnections && !(timeout > maxConnection + 100)) {
       int newConnection = int(random(maxConnection));
       if (newConnection != this.id) { //<>//
         if(AddNewConnection(newConnection)) {;
@@ -38,8 +50,8 @@ class Node {
         }
       }
       timeout++;
-      if (timeout > maxConnection + 100) {break;}
-    } 
+    }
+    
   }
   
   boolean AddNewConnection(int newConnection) {

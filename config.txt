@@ -13,6 +13,7 @@ key_decrease_node_count=n
 key_file_import=f
 key_file_export=s
 key_reload_config=f2
+key_open_config_file=f3
 key_reset_to_config=f5
 }
 

@@ -1,7 +1,6 @@
 class Node {
   Node allNodes[];
   Connection allConnections;
-  int numConnected = 0;
   int maxNumConnections;
   int id;
   int nodeSize = 16;
@@ -10,7 +9,7 @@ class Node {
   color generatedColor = color(random(230), random(230), random(230), random(150, 255));
   color nodeColor = generatedColor;
   
-  Node(Node allNodes[], float maxConnections, int id, Connection connections) {
+  Node(Node allNodes[], float maxConnections,int id, Connection connections) {
     this.allNodes = allNodes;
     this.maxNumConnections = int(random(maxConnections + 1));
     this.id = id;
@@ -31,15 +30,10 @@ class Node {
     int newConnections = 0;
     int maxConnection = allNodes.length;
     int timeout = 0;
-    while (numConnected < maxNumConnections) {
+    while (connections.size() < maxNumConnections) {
       int newConnection = int(random(maxConnection));
-      if (newConnection != this.id) {
-        int[] newConnectionList = {this.id, newConnection}; //<>//
-        if (allConnections.addConnection(newConnectionList)) {
-          numConnected++;
-          allNodes[newConnection].numConnected++;
-          connections.append(newConnection);
-          allNodes[newConnection].connections.append(this.id);
+      if (newConnection != this.id) { //<>//
+        if(AddNewConnection(newConnection)) {;
           timeout = 0;
         }
       }
@@ -48,11 +42,21 @@ class Node {
     } 
   }
   
+  boolean AddNewConnection(int newConnection) {
+    int[] newConnectionList = {this.id, newConnection};
+    if (allConnections.addConnection(newConnectionList)) {
+      connections.append(newConnection);
+      allNodes[newConnection].connections.append(this.id);
+      return true;
+    }
+    return false;
+  }
+  
   void SetNewPosition() {
-    SetRandomPosition();
+    FindRandomPosition();
     int timeout = 0;
     while (IsOverlapping(coord, nodeSize)) {
-      SetRandomPosition();
+      FindRandomPosition();
       timeout++;
       if (timeout > 100) {
         break;
@@ -60,7 +64,7 @@ class Node {
     }
   }
   
-  void SetRandomPosition() {
+  void FindRandomPosition() {
     this.coord.x = random(nodeSize / 2, width - nodeSize / 2);
     this.coord.y = random(nodeSize / 2, height - nodeSize / 2);
   }

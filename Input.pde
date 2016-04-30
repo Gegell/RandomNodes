@@ -14,6 +14,7 @@ class Input{
     else if(isConfigKeyTyped("key_file_import")) {importData();}
     else if(isConfigKeyTyped("key_file_export")) {exportData();}
     else if(isConfigKeyTyped("key_reload_config")) {loadConfig();}
+    else if(isConfigKeyTyped("key_open_config_file")) {openConfigFile();}
     else if(isConfigKeyTyped("key_reset_to_config")) {resetToConfig();}
   }
   
@@ -92,11 +93,20 @@ class Input{
   }
   
   void importData() {
-    
+    if (Utils.loadFromFile("")) {
+      println("Sucessfully loaded the save file");
+    } else {println("Could not load the file, check if the file path exists");}
   }
   
   void exportData() {
     Utils.saveToFile();
+  }
+  
+  void openConfigFile() {
+    if (Utils.fileExists(sketchPath("config.txt"))) {
+      launch(sketchPath("config.txt"));
+      println("Opened the config file");
+    } else {println("Seriously ...? Why is the config.txt missing ?!?!??!?!");}
   }
   
   void resetToConfig() {
@@ -113,6 +123,10 @@ class Input{
   
   void loadConfig() {
     configs = new StringDict();
+    if (!Utils.fileExists(sketchPath("config.txt"))) {
+      println("Seriously ...? Why is the config.txt missing ?!?!??!?!");
+      return;
+    }
     boolean isInsideBraces = false;
     String lines[] = loadStrings("config.txt");
     println("Reloading config");

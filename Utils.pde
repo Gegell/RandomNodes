@@ -47,6 +47,28 @@ class Utils {
     println("Saved to \"" + fileName + "\"");
   }
   
+  boolean loadFromFile(String fileName) {
+    if (fileName == "") {fileName = "saves/" + saveFileName + ".txt";}
+    if (!fileExists(fileName)) {return false;}
+    connections = new Connection();
+    Table saveFileData = loadTable(fileName, "header,csv");
+    nodes = new Node[saveFileData.getRowCount()];
+    for (TableRow row : saveFileData.rows()) {
+      Node newNode = new Node(nodes, 0, row.getInt("id"), connections);
+      newNode.coord = new PVector(row.getFloat("x"), row.getFloat("y"));
+      newNode.generatedColor = color(unhex(row.getString("color")));
+      nodes[row.getInt("id")] = newNode;
+    }
+    for (TableRow row : saveFileData.rows()) {
+      for (int connection : int(splitTokens(row.getString("connections"), "[] ,"))) {
+        nodes[row.getInt("id")].AddNewConnection(connection);
+      }
+    }
+    if (resizeNodesAfterConnections) {resizeNodes();}
+    markSelected();
+    return true;
+  }
+  
   String getFileName() {
     String fileName;
     if (saveFileName == "") {
@@ -77,15 +99,20 @@ class Utils {
     return timeStamp;
   }
   
-  boolean fileExists(String filename) {
-    if (loadStrings(filename) == null) {
-      println("Ignore that error");
-      return false;
-    }
-    return true;
+  boolean fileExists(String fileName) {
+    File file = new File(sketchPath(fileName));
+    return(file.exists());
   }
   
   float log10(int x) {
     return (log(x) / log(10));
+  }
+  
+  IntList toIntList(int[] intArray) {
+    IntList newIntList = new IntList();
+    for (int i : intArray) {
+      newIntList.append(i);
+    }
+    return newIntList;
   }
 }

@@ -23,11 +23,10 @@ void setup() {
 void draw() {
   background(255);
   for (Node node : nodes) {
-    node.Update();
+    if(node != null) {node.Update();}
   }
   if (showConnections) {connections.DrawConnections();}
   if (showStats) {DisplayStats();}
-
 }
 
 void mousePressed() {
@@ -68,7 +67,7 @@ boolean activateClickedNode() {
 
 void GenNewMap() {
   nodes = new Node[numNodes];
-  connections = new Connection(nodes);
+  connections = new Connection();
   for (int i = 0; i < numNodes; i++) {
     nodes[i] = new Node(nodes, maxNodes, i, connections);
   }
@@ -105,7 +104,7 @@ void DisplayStats() {
     information += "Id: " + activeId + "\n";
     information += "X: " + round(nodes[activeId].coord.x) + "\n";
     information += "Y: " + round(nodes[activeId].coord.y) + "\n";
-    information += "Connected: " + nodes[activeId].numConnected + "\n";
+    information += "Connected: " + nodes[activeId].connections.size() + "\n";
   }
   text(information, 4, textSize);
 }
@@ -133,9 +132,9 @@ void markSelected() {
 
 void resizeNodes() {
   float maxNodeConnections = 1;
-  for (Node node : nodes) {maxNodeConnections = max(maxNodeConnections, node.numConnected);}
+  for (Node node : nodes) {maxNodeConnections = max(maxNodeConnections, node.connections.size());}
   for (Node node : nodes) {
-    node.nodeSize = int(8 + 32 * (node.numConnected / maxNodeConnections));
+    node.nodeSize = int(8 + 32 * (node.connections.size() / maxNodeConnections));
   }
 }
 

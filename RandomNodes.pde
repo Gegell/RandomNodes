@@ -80,9 +80,9 @@ boolean activateClickedNode() {
 
 int getIdAt(float x, float y) {
   int activeId = -1;
-  for (Node node : nodes) {
-    if (dist(node.coord.x, node.coord.y, x, y) < node.nodeSize/2) {
-      activeId = node.id;
+  for (int i = nodes.length - 1; i >= 0; i--) {
+    if (dist(nodes[i].coord.x, nodes[i].coord.y, x, y) < nodes[i].nodeSize/2) {
+      activeId = nodes[i].id;
       break;
     }
   }

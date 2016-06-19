@@ -21,6 +21,8 @@ class Input {
       increaseNodeCount();
     } else if (isConfigKeyTyped("key_decrease_node_count")) {
       decreaseNodeCount();
+    } else if (isConfigKeyTyped("key_resort_nodes")) {
+      sortNodes();
     } else if (isConfigKeyTyped("key_file_import")) {
       importData();
     } else if (isConfigKeyTyped("key_file_export")) {
@@ -125,7 +127,7 @@ class Input {
   void exportData() {
     Utils.saveToFile();
   }
-
+  
   void openConfigFile() {
     if (Utils.fileExists(sketchPath("config.txt"))) {
       launch(sketchPath("config.txt"));

@@ -88,6 +88,10 @@ class Node {
   void SetNewPosition() {
     FindRandomPosition();
     int timeout = 0;
+    if (numNodes >= 1000) {
+      FindRandomPosition();
+      return;
+    }
     while (IsOverlapping(coord, nodeSize)) {
       FindRandomPosition();
       timeout++;

@@ -13,6 +13,10 @@ class Input {
       toggleEditMode();
     } else if (isConfigKeyTyped("key_toggle_connection_draw_mode")) {
       toggleConnectionDrawMode();
+    } else if (isConfigKeyTyped("key_toggle_resort")) {
+      Sorter.sortNodes();
+    } else if (isConfigKeyTyped("key_toggle_sort_mode")) {
+      toggleSortMode();
     } else if (isConfigKeyTyped("key_increase_max_connections")) {
       increaseMaxConnections();
     } else if (isConfigKeyTyped("key_decrease_max_connections")) {
@@ -21,8 +25,6 @@ class Input {
       increaseNodeCount();
     } else if (isConfigKeyTyped("key_decrease_node_count")) {
       decreaseNodeCount();
-    } else if (isConfigKeyTyped("key_resort_nodes")) {
-      sortNodes();
     } else if (isConfigKeyTyped("key_file_import")) {
       importData();
     } else if (isConfigKeyTyped("key_file_export")) {
@@ -65,6 +67,13 @@ class Input {
       editMode = 0;
     }
     markSelected();
+  }
+  
+  void toggleSortMode() {
+    sortMode++;
+    if (sortMode > 0) {
+      sortMode = 0;
+    }
   }
 
   void toggleResizeMode() {
@@ -127,7 +136,7 @@ class Input {
   void exportData() {
     Utils.saveToFile();
   }
-  
+
   void openConfigFile() {
     if (Utils.fileExists(sketchPath("config.txt"))) {
       launch(sketchPath("config.txt"));

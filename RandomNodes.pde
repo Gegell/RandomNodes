@@ -3,6 +3,7 @@ int maxNodes = 1;
 int seed;
 int activeId = -1;
 int editMode = 1;
+int sortMode = 0;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
@@ -10,6 +11,7 @@ Node[] nodes;
 Connection connections;
 Utils Utils = new Utils();
 Input Input = new Input();
+Sorter Sorter = new Sorter();
 
 void setup() {
   Input.resetToConfig();
@@ -19,7 +21,6 @@ void setup() {
   size(480, 320);
   rectMode(CENTER);
   GenNewMap();
-  sortNodes();
 }
 
 void draw() {
@@ -120,6 +121,7 @@ void DisplayStats() {
   information += "Seed: " + hex(seed).substring(2) + "\n";
   information += "Mode: " + Utils.getModeName(Utils.modeId) + "\n";
   information += "Edit mode: " + Utils.getEditModeName(editMode) + "\n";
+  information += "Sort mode: " + Sorter.getSortModeName() + "\n"; 
   information += "Total connections: " + connections.connections.size() + "\n";
   information += "Avg. connections: " + averageNodeConnections() + "\n";
   information += "Max connections: " + maxNodes + "\n";
@@ -204,12 +206,4 @@ IntList getConnections(int startId) {
     }
   }
   return foundConnections;
-}
-
-void sortNodes() {
-  float radius = (min(width, height) - 40)/2;
-  float angle = TWO_PI / float(numNodes);
-  for (int i = 0; i < numNodes; i++) {
-    nodes[i].coord = new PVector(radius*sin(angle*i) + (width / 2),radius*cos(angle*i) + (height / 2));
-  }
 }

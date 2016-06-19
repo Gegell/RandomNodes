@@ -2,21 +2,21 @@ int numNodes = 10;
 int maxNodes = 1;
 int seed;
 int activeId = -1;
+int editMode = 1;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
-boolean editMode = true;
 Node[] nodes;
 Connection connections;
 Utils Utils = new Utils();
 Input Input = new Input();
 
 void setup() {
-  Input.loadConfig();
+  Input.resetToConfig();
   GenNewSeed();
   surface.setResizable(true);
   surface.setTitle("Random Nodes");
-  size(480,320);
+  size(480, 320);
   rectMode(CENTER);
   GenNewMap();
 }
@@ -24,21 +24,37 @@ void setup() {
 void draw() {
   background(255);
   for (Node node : nodes) {
-    if(node != null) {node.Update();}
+    if (node != null) {
+      node.Update();
+    }
   }
-  if (showConnections) {connections.DrawConnections();}
-  if (showStats) {DisplayStats();}
+  if (showConnections) {
+    connections.DrawConnections();
+  }
+  if (showStats) {
+    DisplayStats();
+  }
 }
 
 void mousePressed() {
+  int prevId = activeId;
   activateClickedNode();
+  if (editMode == 2 && activeId >= 0 && prevId >= 0 && prevId != activeId) {
+    int testConnection[] = {activeId, prevId};
+    if (connections.hasConnection(testConnection)) {
+      nodes[activeId].RemoveConnection(prevId);
+    } else {
+      nodes[activeId].AddNewConnection(prevId);
+    }
+    if (resizeNodesAfterConnections) resizeNodes();
+    activeId = prevId;
+    markSelected();
+  }
 }
 
 void mouseDragged() {
-  
-  if (editMode && activeId >= 0) {
-    nodes[activeId].coord.x = mouseX;
-    nodes[activeId].coord.y = mouseY;
+  if (editMode == 1 && activeId >= 0) {
+    nodes[activeId].coord = new PVector(mouseX, mouseY);
   }
 }
 
@@ -49,21 +65,28 @@ void keyPressed() {
 
 boolean activateClickedNode() {
   int prevActiveId = activeId;
-  activeId = -1;
-  for (Node node : nodes) {
-    if (dist(node.coord.x, node.coord.y, mouseX, mouseY) < node.nodeSize/2) {
-      activeId = node.id;
-      break;
-    }
-  }
+  activeId = getIdAt(mouseX, mouseY);
   if (activeId != prevActiveId) {
     markSelected();
     if (activeId >= 0) {
       println("Activated id " + activeId);
-    } else {println("Deactivated all nodes");}
+    } else {
+      println("Deactivated all nodes");
+    }
     return true;
   }
   return false;
+}
+
+int getIdAt(float x, float y) {
+  int activeId = -1;
+  for (Node node : nodes) {
+    if (dist(node.coord.x, node.coord.y, x, y) < node.nodeSize/2) {
+      activeId = node.id;
+      break;
+    }
+  }
+  return activeId;
 }
 
 void GenNewMap() {
@@ -76,7 +99,9 @@ void GenNewMap() {
     node.SetNewPosition();
     node.SetNewConnections();
   }
-  if (resizeNodesAfterConnections) {resizeNodes();}
+  if (resizeNodesAfterConnections) {
+    resizeNodes();
+  }
   markSelected();
 }
 
@@ -93,14 +118,17 @@ void DisplayStats() {
   String information = "";
   information += "Seed: " + hex(seed).substring(2) + "\n";
   information += "Mode: " + Utils.getModeName(Utils.modeId) + "\n";
+  information += "Edit mode ";
+  if (editMode > 0) {
+    information += editMode + " active\n";
+  } else {
+    information += "inactive\n";
+  }
   information += "Total connections: " + connections.connections.size() + "\n";
   information += "Avg. connections: " + averageNodeConnections() + "\n";
   information += "Max connections: " + maxNodes + "\n";
   information += "Nodes: " + numNodes + "\n";
   information += "\n";
-  if (editMode) {
-    information += "Edit mode active\n";
-  }
   if (activeId >= 0) {
     information += "Id: " + activeId + "\n";
     information += "X: " + round(nodes[activeId].coord.x) + "\n";
@@ -125,9 +153,22 @@ void markSelected() {
         nodes[id].nodeColor = color(18, 231, 145);
       }
     }
-    nodes[activeId].nodeColor = color(242,179,85);
+    nodes[activeId].nodeColor = getActiveColor();
   } else {
-    for (Node node : nodes) {node.nodeColor = node.generatedColor;}
+    for (Node node : nodes) {
+      node.nodeColor = node.generatedColor;
+    }
+  }
+}
+
+color getActiveColor() {
+  switch (editMode) {
+  default:
+    return color(242, 85, 179);
+  case 1:
+    return color(242, 179, 85);
+  case 2:
+    return color(85, 179, 242);
   }
 }
 

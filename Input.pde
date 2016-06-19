@@ -1,72 +1,94 @@
-class Input{
+class Input {
   StringDict configs;
   void applyChange() {
-    if (isConfigKeyTyped("key_respawn")) {regenNodes();}
-    else if(isConfigKeyTyped("key_toggle_information")) {toggleInformation();}
-    else if(isConfigKeyTyped("key_toggle_connections")) {toggleConnections();}
-    else if(isConfigKeyTyped("key_toggle_resize_nodes")) {toggleResizeMode();}
-    else if(isConfigKeyTyped("key_toggle_edit_mode")) {toggleEditMode();}
-    else if(isConfigKeyTyped("key_toggle_connection_draw_mode")) {toggleConnectionDrawMode();}
-    else if(isConfigKeyTyped("key_increase_max_connections")) {increaseMaxConnections();}
-    else if(isConfigKeyTyped("key_decrease_max_connections")) {decreaseMaxConnections();}
-    else if(isConfigKeyTyped("key_increase_node_count")) {increaseNodeCount();}
-    else if(isConfigKeyTyped("key_decrease_node_count")) {decreaseNodeCount();}
-    else if(isConfigKeyTyped("key_file_import")) {importData();}
-    else if(isConfigKeyTyped("key_file_export")) {exportData();}
-    else if(isConfigKeyTyped("key_reload_config")) {loadConfig();}
-    else if(isConfigKeyTyped("key_open_config_file")) {openConfigFile();}
-    else if(isConfigKeyTyped("key_reset_to_config")) {resetToConfig();}
+    if (isConfigKeyTyped("key_respawn")) {
+      regenNodes();
+    } else if (isConfigKeyTyped("key_toggle_information")) {
+      toggleInformation();
+    } else if (isConfigKeyTyped("key_toggle_connections")) {
+      toggleConnections();
+    } else if (isConfigKeyTyped("key_toggle_resize_nodes")) {
+      toggleResizeMode();
+    } else if (isConfigKeyTyped("key_toggle_edit_mode")) {
+      toggleEditMode();
+    } else if (isConfigKeyTyped("key_toggle_connection_draw_mode")) {
+      toggleConnectionDrawMode();
+    } else if (isConfigKeyTyped("key_increase_max_connections")) {
+      increaseMaxConnections();
+    } else if (isConfigKeyTyped("key_decrease_max_connections")) {
+      decreaseMaxConnections();
+    } else if (isConfigKeyTyped("key_increase_node_count")) {
+      increaseNodeCount();
+    } else if (isConfigKeyTyped("key_decrease_node_count")) {
+      decreaseNodeCount();
+    } else if (isConfigKeyTyped("key_file_import")) {
+      importData();
+    } else if (isConfigKeyTyped("key_file_export")) {
+      exportData();
+    } else if (isConfigKeyTyped("key_reload_config")) {
+      loadConfig();
+    } else if (isConfigKeyTyped("key_open_config_file")) {
+      openConfigFile();
+    } else if (isConfigKeyTyped("key_reset_to_config")) {
+      resetToConfig();
+    }
   }
-  
+
   boolean isConfigKeyTyped(String configKey) {
     if (!configs.hasKey(configKey)) {
       return false;
     }
     return int(configs.get(configKey)) == keyCode;
   }
-  
+
   void regenNodes() {
     println("Respawn");
     GenNewSeed();
     GenNewMap();
   }
-  
+
   void toggleInformation() {
     showStats = !showStats;
     println("Show stats: " + showStats);
   }
-  
+
   void toggleConnections() {
     showConnections = !showConnections;
     println("Show connections: " + showConnections);
   }
-  
+
   void toggleEditMode() {
-    editMode = !editMode;
+    editMode++;
+    if (editMode > 2) {
+      editMode = 0;
+    }
+    markSelected();
   }
-  
+
   void toggleResizeMode() {
     resizeNodesAfterConnections = !resizeNodesAfterConnections;
     println("Resize nodes after connections: " + resizeNodesAfterConnections);
     if (resizeNodesAfterConnections) {
       resizeNodes();
     } else {
-      for (Node node : nodes) {node.nodeSize = 16;}
+      for (Node node : nodes) {
+        node.nodeSize = 16;
+      }
     }
   }
-  
+
   void toggleConnectionDrawMode() {
     Utils.toggleModeId();
     markSelected();
     println("Set mode to " + Utils.getModeName(Utils.modeId));
   }
-  
+
   void increaseMaxConnections() {
     maxNodes++;
     GenNewMap();
     println("Increased max connections to " + maxNodes);
   }
-  
+
   void decreaseMaxConnections() {
     if (maxNodes > 0) {
       maxNodes--;
@@ -74,13 +96,13 @@ class Input{
       println("Decreased max connections to " + maxNodes);
     }
   }
-  
+
   void increaseNodeCount() {
     numNodes += pow(10, (floor(Utils.log10(abs(numNodes)))));
     GenNewMap();
     println("Increased nodes to " + numNodes);
   }
-  
+
   void decreaseNodeCount() {
     if (numNodes > 10) {
       numNodes -= pow(10, (floor(Utils.log10(abs(numNodes - 10)))));
@@ -91,36 +113,52 @@ class Input{
       println("Decreased nodes to " + numNodes);
     }
   }
-  
+
   void importData() {
     if (Utils.loadFromFile("")) {
       println("Sucessfully loaded the save file");
-    } else {println("Could not load the file, check if the file path exists");}
+    } else {
+      println("Could not load the file, check if the file path exists");
+    }
   }
-  
+
   void exportData() {
     Utils.saveToFile();
   }
-  
+
   void openConfigFile() {
     if (Utils.fileExists(sketchPath("config.txt"))) {
       launch(sketchPath("config.txt"));
       println("Opened the config file");
-    } else {println("Seriously ...? Why is the config.txt missing ?!?!??!?!");}
+    } else {
+      println("Seriously ...? Why is the config.txt missing ?!?!??!?!");
+    }
   }
-  
+
   void resetToConfig() {
     loadConfig();
     println("Reset to config file");
-    if (configs.hasKey("setup_show_stats")) {showStats = boolean(configs.get("setup_show_stats"));}
-    if (configs.hasKey("setup_show_connections")) {showConnections = boolean(configs.get("setup_show_connections"));}
-    if (configs.hasKey("setup_resize_nodes")) {resizeNodesAfterConnections = boolean(configs.get("setup_resize_nodes"));}
-    if (configs.hasKey("setup_edit_mode")) {editMode = boolean(configs.get("setup_edit_mode"));}
-    if (configs.hasKey("setup_number_nodes")) {numNodes = int(configs.get("setup_number_nodes"));}
-    if (configs.hasKey("setup_max_connections")) {maxNodes = int(configs.get("setup_max_connections"));}
+    if (configs.hasKey("setup_show_stats")) {
+      showStats = boolean(configs.get("setup_show_stats"));
+    }
+    if (configs.hasKey("setup_show_connections")) {
+      showConnections = boolean(configs.get("setup_show_connections"));
+    }
+    if (configs.hasKey("setup_resize_nodes")) {
+      resizeNodesAfterConnections = boolean(configs.get("setup_resize_nodes"));
+    }
+    if (configs.hasKey("setup_edit_mode")) {
+      editMode = int(configs.get("setup_edit_mode"));
+    }
+    if (configs.hasKey("setup_number_nodes")) {
+      numNodes = int(configs.get("setup_number_nodes"));
+    }
+    if (configs.hasKey("setup_max_connections")) {
+      maxNodes = int(configs.get("setup_max_connections"));
+    }
     GenNewMap();
   }
-  
+
   void loadConfig() {
     configs = new StringDict();
     if (!Utils.fileExists(sketchPath("config.txt"))) {
@@ -131,11 +169,15 @@ class Input{
     String lines[] = loadStrings("config.txt");
     println("Reloading config");
     for (String line : lines) {
-      if (line.indexOf("{") == line.length() - 1) {isInsideBraces = true;}
-      if (line.indexOf("}") >= 0) {isInsideBraces = false;}
+      if (line.indexOf("{") == line.length() - 1) {
+        isInsideBraces = true;
+      }
+      if (line.indexOf("}") >= 0) {
+        isInsideBraces = false;
+      }
       if (isInsideBraces && line.indexOf("=") >= 0) {
-        String configName = trim(split(line,"=")[0]);
-        String configValue = trim(split(line,"=")[1]);
+        String configName = trim(split(line, "=")[0]);
+        String configValue = trim(split(line, "=")[1]);
         configValue = configValue.toUpperCase();
         print(configName + ": " + configValue);
         if (configName.contains("key")) {

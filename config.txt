@@ -21,7 +21,7 @@ key_reset_to_config=f5
 setup_show_stats=true
 setup_show_connections=true
 setup_resize_nodes=false
-setup_edit_mode=true
+setup_edit_mode=1
 setup_number_nodes=10
 setup_max_connections=1
 }

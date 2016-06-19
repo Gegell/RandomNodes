@@ -2,7 +2,7 @@ class Connection {
   ArrayList<IntList> connections = new ArrayList<IntList>();
   
   Connection() {
-    ArrayList<IntList> connections = new ArrayList<IntList>();
+    connections = new ArrayList<IntList>();
   }
   
   boolean addConnection(int[] newConnection) {
@@ -13,9 +13,21 @@ class Connection {
     return true;
   }
   
+  boolean removeConnection(int[] oldConnection) {
+    if(!hasConnection(oldConnection)) {
+      return false;
+    }
+    for (int i = 0; i < connections.size(); i++) {
+      if (connections.get(i).get(0) == Utils.toIntList(oldConnection).get(0) && connections.get(i).get(1) == Utils.toIntList(oldConnection).get(1)) {
+        connections.remove(i);
+      }
+    }
+    return true;
+  }
+  
   boolean hasConnection(int[] testConnection) {
     for (IntList connection : connections) {
-      if (connection.hasValue(testConnection[0]) && connection.hasValue(testConnection[1]) || testConnection[0] == testConnection[1]) {
+      if ((connection.hasValue(testConnection[0]) && connection.hasValue(testConnection[1])) || testConnection[0] == testConnection[1]) {
         return true;
       }
     }

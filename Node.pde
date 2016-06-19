@@ -26,6 +26,8 @@ class Node {
     fill(nodeColor);
     if (connections.size() == 1) {
       type = 1;
+    } else {
+      type = 0;
     }
     switch (type) {
       case 0:
@@ -33,7 +35,7 @@ class Node {
         ellipse(coord.x, coord.y, nodeSize, nodeSize);
         break;
       case 1:
-        rect(coord.x, coord.y, nodeSize, nodeSize);
+        rect(coord.x, coord.y, nodeSize, nodeSize, 2);
         break;
     }
   }
@@ -59,6 +61,25 @@ class Node {
     if (allConnections.addConnection(newConnectionList)) {
       connections.append(newConnection);
       allNodes[newConnection].connections.append(this.id);
+      return true;
+    }
+    return false;
+  }
+  
+  boolean RemoveConnection(int oldConnection) {
+    int[] newConnectionList = {this.id, oldConnection};
+    if (allConnections.removeConnection(newConnectionList)) {
+      for (int c = 0; c < connections.size(); c++) {
+        if (connections.get(c) == this.id) {
+          connections.remove(c);
+        }
+      }
+      IntList otherConnections = allNodes[oldConnection].connections;
+      for (int c = 0; c < otherConnections.size(); c++) {
+        if (otherConnections.get(c) == this.id) {
+          otherConnections.remove(c);
+        }
+      }
       return true;
     }
     return false;

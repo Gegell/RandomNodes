@@ -70,7 +70,7 @@ class Node {
     int[] newConnectionList = {this.id, oldConnection};
     if (allConnections.removeConnection(newConnectionList)) {
       for (int c = 0; c < connections.size(); c++) {
-        if (connections.get(c) == this.id) {
+        if (connections.get(c) == oldConnection) {
           connections.remove(c);
         }
       }

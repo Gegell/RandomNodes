@@ -21,7 +21,7 @@ class Connection {
       if (connections.get(i).get(0) == Utils.toIntList(oldConnection).get(0) && connections.get(i).get(1) == Utils.toIntList(oldConnection).get(1)) {
         connections.remove(i);
       } else if (connections.get(i).get(0) == Utils.toIntList(oldConnection).get(1) && connections.get(i).get(1) == Utils.toIntList(oldConnection).get(0)) {
-      
+        connections.remove(i);
       }
     }
     return true;

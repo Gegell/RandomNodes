@@ -4,7 +4,6 @@ int seed;
 int activeId = -1;
 int editMode = 1;
 int sortMode = 0;
-int onNetwork;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
@@ -132,11 +131,7 @@ void DisplayStats() {
     information += "Id: " + activeId + "\n";
     information += "X: " + round(nodes[activeId].coord.x) + "\n";
     information += "Y: " + round(nodes[activeId].coord.y) + "\n";
-    if (Utils.modeId == 0) {
-      information += "Connected: " + nodes[activeId].connections.size() + "\n";
-    } else if (Utils.modeId == 1) {
-      information += "On Network: " + onNetwork + "\n";
-    }
+    information += "Connected: " + nodes[activeId].connections.size() + "\n";
   }
   text(information, 4, textSize);
 }
@@ -150,7 +145,6 @@ void setAllNodeColors(color setTo) {
 void markSelected() {
   if (activeId >= 0) {
     IntList nodeConnections = getConnections(activeId);
-    onNetwork = nodeConnections.size();
     setAllNodeColors(color(100));
     for (int id : nodeConnections) {
       if (id != activeId) {

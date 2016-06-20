@@ -1,7 +1,7 @@
 class Sorter {
   Sorter() {
   }
-  
+
   String getSortModeName() {
     switch(sortMode) {
     case 0:

@@ -120,7 +120,7 @@ void DisplayStats() {
   textLeading(textSize);
   String information = "";
   information += "Seed: " + hex(seed).substring(2) + "\n";
-  information += "Mode: " + Utils.getModeName(Utils.modeId) + "\n";
+  information += "Con. Mode: " + Utils.getModeName(Utils.modeId) + "\n";
   information += "Edit mode: " + Utils.getEditModeName(editMode) + "\n";
   information += "Sort mode: " + Sorter.getSortModeName() + "\n"; 
   information += "Total connections: " + connections.connections.size() + "\n";

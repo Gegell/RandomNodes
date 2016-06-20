@@ -71,7 +71,7 @@ class Input {
   
   void toggleSortMode() {
     sortMode++;
-    if (sortMode > 0) {
+    if (sortMode > 2) {
       sortMode = 0;
     }
   }

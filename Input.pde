@@ -1,5 +1,15 @@
 class Input {
   StringDict configs;
+  String tips;
+  String configPath = "data/config.txt";
+  String tipPath = "data/tips.txt";
+  
+  Input() {
+    loadTips();
+    resetToConfig();
+  }
+  
+  
   void applyChange() {
     if (isConfigKeyTyped("key_respawn")) {
       regenNodes();
@@ -29,6 +39,8 @@ class Input {
       importData();
     } else if (isConfigKeyTyped("key_file_export")) {
       exportData();
+    } else if (isConfigKeyTyped("key_show_help")) {
+      displayTips();
     } else if (isConfigKeyTyped("key_reload_config")) {
       loadConfig();
     } else if (isConfigKeyTyped("key_open_config_file")) {
@@ -68,7 +80,7 @@ class Input {
     }
     markSelected();
   }
-  
+
   void toggleSortMode() {
     sortMode++;
     if (sortMode > 2) {
@@ -138,8 +150,8 @@ class Input {
   }
 
   void openConfigFile() {
-    if (Utils.fileExists(sketchPath("config.txt"))) {
-      launch(sketchPath("config.txt"));
+    if (Utils.fileExists(sketchPath(configPath))) {
+      launch(sketchPath(configPath));
       println("Opened the config file");
     } else {
       println("Seriously ...? Why is the config.txt missing ?!?!??!?!");
@@ -147,7 +159,7 @@ class Input {
   }
 
   void resetToConfig() {
-    loadConfig();
+    if (!loadConfig()) return;
     println("Reset to config file");
     if (configs.hasKey("setup_show_stats")) {
       showStats = boolean(configs.get("setup_show_stats"));
@@ -169,16 +181,21 @@ class Input {
     }
     GenNewMap();
   }
+  
+  void displayTips() {
+    Helper.tipsDisplayed = !Helper.tipsDisplayed;
+    Helper.displayTips();
+  }
 
-  void loadConfig() {
+  boolean loadConfig() {
     configs = new StringDict();
-    if (!Utils.fileExists(sketchPath("config.txt"))) {
+    if (!Utils.fileExists(sketchPath(configPath))) {
       println("Seriously ...? Why is the config.txt missing ?!?!??!?!");
-      return;
+      return false;
     }
     boolean isInsideBraces = false;
-    String lines[] = loadStrings("config.txt");
-    println("Reloading config");
+    String lines[] = loadStrings(configPath);
+    println("Loading config");
     for (String line : lines) {
       if (line.indexOf("{") == line.length() - 1) {
         isInsideBraces = true;
@@ -204,5 +221,21 @@ class Input {
         configs.set(configName, configValue);
       }
     }
+    return true;
+  }
+
+  void loadTips() {
+    tips = "";
+    if (!Utils.fileExists(sketchPath(tipPath))) {
+      println("Lel, go download the tips.txt and/or put it inside the project folder. ;D");
+      return;
+    }
+    String lines[] = loadStrings(tipPath);
+    println("Loading tips");
+    for (String line : lines) {
+      tips += line;
+      tips += "\n";
+    }
+    println(tips);
   }
 }

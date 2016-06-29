@@ -11,17 +11,19 @@ boolean resizeNodesAfterConnections = false;
 Node[] nodes;
 Connection connections;
 Utils Utils = new Utils();
-Input Input = new Input();
+Input Input;
 Sorter Sorter = new Sorter();
+Helper Helper = new Helper();
 
 void setup() {
-  Input.resetToConfig();
   GenNewSeed();
   surface.setResizable(true);
   surface.setTitle("Random Nodes");
   size(480, 320);
   rectMode(CENTER);
+  textAlign(LEFT, TOP);
   GenNewMap();
+  Input = new Input();
 }
 
 void draw() {
@@ -34,8 +36,11 @@ void draw() {
   if (showConnections) {
     connections.DrawConnections();
   }
-  if (showStats) {
+  if (showStats && !Helper.tipsDisplayed) {
     DisplayStats();
+  }
+  if (Helper.tipsDisplayed) {
+    Helper.displayTips();
   }
 }
 
@@ -118,27 +123,7 @@ void DisplayStats() {
   fill(0);
   textSize(textSize);
   textLeading(textSize);
-  String information = "";
-  information += "Seed: " + hex(seed).substring(2) + "\n";
-  information += "Con. Mode: " + Utils.getModeName(Utils.modeId) + "\n";
-  information += "Edit mode: " + Utils.getEditModeName(editMode) + "\n";
-  information += "Sort mode: " + Sorter.getSortModeName() + "\n"; 
-  information += "Total connections: " + connections.connections.size() + "\n";
-  information += "Avg. connections: " + averageNodeConnections() + "\n";
-  information += "Max connections: " + maxNodes + "\n";
-  information += "Nodes: " + numNodes + "\n";
-  information += "\n";
-  if (activeId >= 0) {
-    information += "Id: " + activeId + "\n";
-    information += "X: " + round(nodes[activeId].coord.x) + "\n";
-    information += "Y: " + round(nodes[activeId].coord.y) + "\n";
-    if (Utils.modeId == 0) {
-      information += "Connected: " + nodes[activeId].connections.size() + "\n";
-    } else if (Utils.modeId == 1) {
-      information += "On Network: " + onNetwork + "\n";
-    }
-  }
-  text(information, 4, textSize);
+  text(Helper.getInfo(), 4, 2);
 }
 
 void setAllNodeColors(color setTo) {

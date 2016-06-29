@@ -1,0 +1,4 @@
+How to use:
+
+[k]keys
+[t]Normal text

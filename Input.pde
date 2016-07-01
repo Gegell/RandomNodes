@@ -182,6 +182,9 @@ class Input {
     if (configs.hasKey("setup_max_connections")) {
       maxNodes = int(configs.get("setup_max_connections"));
     }
+    if (configs.hasKey("setup_connections_in_percent")) {
+      percentMaxNodeConnections = boolean(configs.get("setup_connections_in_percent"));
+    }
     GenNewMap();
     println();
   }

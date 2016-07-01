@@ -8,7 +8,7 @@ int onNetwork;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
-boolean percentMaxNodeConnections = true;
+boolean percentMaxNodeConnections = false;
 Node[] nodes;
 Connection connections;
 Utils Utils = new Utils();

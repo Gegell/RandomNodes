@@ -48,7 +48,7 @@ class Helper {
     information += "Sort mode: " + Sorter.getSortModeName() + "\n"; 
     information += "Total connections: " + connections.connections.size() + "\n";
     information += "Avg. connections: " + averageNodeConnections() + "\n";
-    information += "Max connections: " + maxNodes + "\n";
+    information += "Max connections: " + maxNodes + ((percentMaxNodeConnections)?"%\n":"\n");
     information += "Nodes: " + numNodes + "\n";
     information += "\n";
     if (activeId >= 0) {

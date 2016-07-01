@@ -12,19 +12,29 @@ class Helper {
     boolean isInsideBraces = false;
     String finalText = "";
     int line = 0;
+    String type = "";
     for (int i = 0; i < Input.tips.length(); i++) {
       char ci = Input.tips.charAt(i);
+
       if (!isInsideBraces && ci == '[') {
         isInsideBraces = true;
-      } else if (isInsideBraces && ci == ']') {
-        isInsideBraces = false;
+        type = "";
       } else if (isInsideBraces) {
-        setTextType(str(ci));
-      } else if (i < Input.tips.length() - 1 && str(ci).contains("\n")){
+        while (isInsideBraces && ci != ']') {
+          type += ci;
+          if (type.length() > 10) {
+            break;
+          }
+          i++;
+          ci = Input.tips.charAt(i);
+        }
+        isInsideBraces = false;
+        setTextType(type);
+      } else if (i < Input.tips.length() - 1 && str(ci).contains("\n")) {
         line++;
         finalText = "";
       } else {
-        text(Input.tips.charAt(i), textWidth(finalText), line * 12);
+        text(Input.tips.charAt(i), textWidth(finalText) + 4, line * 12 + 2);
         finalText += Input.tips.charAt(i);
       }
     }
@@ -55,15 +65,19 @@ class Helper {
   }
 
   void setTextType(String type) {
-    switch(type) {
+    switch(type.toLowerCase()) {
+    default:
     case "t":
       fill(255);
       return;
     case "k":
       fill(242, 85, 85);
       return;
-    default:
+    case "m":
+      fill(85, 179, 242);
       return;
+    case "h":
+      fill(242, 242, 85);
     }
   }
 }

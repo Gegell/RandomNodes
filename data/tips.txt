@@ -1,4 +1,23 @@
-How to use:
+[h]1. Mouse Controll
+    [m]Edit mode: Selection:[t] Displays all stats but can't edit the nodes.
+    [m]Edit mode Moving:[t] You can drag nodes around.
+    [m]Edit mode: Connection:[t] Add / Remove connections by clicking on a node and the one you want to connect it to.
 
-[k]keys
-[t]Normal text
+[h]2. Keyboard Controll
+    [kc]key_show_help[t] Shows / Hides this in-app help.
+    [kc]key_reload_config[t] Reloads the config file.
+    [kc]key_open_config_file[t] Opens the config file in your editor.
+    [kc]key_reset_to_config[t] Sets the app values to the config values.
+    [kc]key_file_import[t] Imports a saved scene from the save.txt file.
+    [kc]key_file_export[t] Saves to the standart save directory. (Either as save.txt or save(n).txt)
+    [kc]key_toggle_information[t] Toggles the info overlay.
+    [kc]key_toggle_resize_nodes[t] Resizes the nodes to their relative connection count.
+    [kc]key_toggle_connections[t] Toggles the visibility of the node connections.
+    [kc]key_toggle_connection_draw_mode[t] Toggles between direct connection and network marking.
+    [kc]key_toggle_sort_mode[t] Switches between different sort modes.
+    [kc]key_toggle_resort[t] Automaticly "sorts" the network.
+
+    [t]When randomly spawning:
+    [kc]key_respawn[t] Respawns the whole scene.
+    [kc]key_increase_node_count[t] increases and [kc]key_decrease_node_count[t] decreases the nodes spawned.
+    [kc]key_increase_max_connections[t] increases and [kc]key_decrease_max_connections[t] decreases the maximum connections between the nodes.

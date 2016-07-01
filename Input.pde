@@ -3,13 +3,13 @@ class Input {
   String tips;
   String configPath = "data/config.txt";
   String tipPath = "data/tips.txt";
-  
+
   Input() {
-    loadTips();
     resetToConfig();
+    loadTips();
   }
-  
-  
+
+
   void applyChange() {
     if (isConfigKeyTyped("key_respawn")) {
       regenNodes();
@@ -160,7 +160,7 @@ class Input {
 
   void resetToConfig() {
     if (!loadConfig()) return;
-    println("Reset to config file");
+    println("****************** Reset to config file ******************");
     if (configs.hasKey("setup_show_stats")) {
       showStats = boolean(configs.get("setup_show_stats"));
     }
@@ -180,11 +180,11 @@ class Input {
       maxNodes = int(configs.get("setup_max_connections"));
     }
     GenNewMap();
+    println();
   }
-  
+
   void displayTips() {
     Helper.tipsDisplayed = !Helper.tipsDisplayed;
-    Helper.displayTips();
   }
 
   boolean loadConfig() {
@@ -195,7 +195,7 @@ class Input {
     }
     boolean isInsideBraces = false;
     String lines[] = loadStrings(configPath);
-    println("Loading config");
+    println("****************** Loading config ******************");
     for (String line : lines) {
       if (line.indexOf("{") == line.length() - 1) {
         isInsideBraces = true;
@@ -208,7 +208,7 @@ class Input {
         String configValue = trim(split(line, "=")[1]);
         configValue = configValue.toUpperCase();
         print(configName + ": " + configValue);
-        if (configName.contains("key")) {
+        if (configName.substring(0, 3).contains("key")) {
           if (configValue.length() > 1 && configValue.charAt(0) == 'F') {
             configValue = str(111 + int(configValue.substring(1)));
           }
@@ -221,6 +221,7 @@ class Input {
         configs.set(configName, configValue);
       }
     }
+    println();
     return true;
   }
 
@@ -231,11 +232,43 @@ class Input {
       return;
     }
     String lines[] = loadStrings(tipPath);
-    println("Loading tips");
+    println("****************** Loading tips ******************");
+    println("Opend :" + tipPath);
     for (String line : lines) {
       tips += line;
       tips += "\n";
     }
+    String[][] keys = matchAll(tips, "(?<=\\[kc\\])\\w*(?=(\\[||\\s))");
+    if (keys != null) {
+      StringList keyCodes = new StringList();
+      for (int i = 0; i < keys.length; i++) {
+        if (configs.hasKey(keys[i][0])) {
+          keyCodes.appendUnique(keys[i][0]);
+        }
+      }
+      for (String kc : keyCodes) {
+        if (configs.get(kc) == null) continue; 
+        int k = int(configs.get(kc));
+        tips = tips.replace("[kc]" + kc, "[k]" + getKey(k));
+        println("Found config key \"" + kc + "\" and replaced with " + str(char(k)));
+      }
+      println();
+    }
+    println("****************** Tips ******************");
     println(tips);
+  }
+
+  String getKey(int k) {
+    String helpKey = "";
+    if (k >= 'A' && k <= 'Z') {
+      helpKey = str(char(k));
+    } else if (k >= 112 && k <= 124) { 
+      helpKey = "F" + (k-111);
+    } else if (k == 32) { 
+      helpKey = "SPACE";
+    } else { 
+      helpKey = str(k);
+    }
+    return helpKey;
   }
 }

@@ -24,6 +24,7 @@ void setup() {
   textAlign(LEFT, TOP);
   GenNewMap();
   Input = new Input();
+  println("****************** Setup done ******************");
 }
 
 void draw() {

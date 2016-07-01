@@ -111,6 +111,9 @@ void GenNewMap() {
   if (resizeNodesAfterConnections) {
     resizeNodes();
   }
+  if (sortMode != 0) {
+    Sorter.sortNodes();
+  }
   markSelected();
 }
 

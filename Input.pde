@@ -132,6 +132,9 @@ class Input {
       if (activeId > numNodes) {
         activeId = numNodes - 1;
       }
+      if (maxNodes > numNodes) {
+        maxNodes = numNodes;
+      }
       GenNewMap();
       println("Decreased nodes to " + numNodes);
     }

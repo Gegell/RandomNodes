@@ -8,6 +8,7 @@ int onNetwork;
 boolean showStats = true;
 boolean showConnections = true;
 boolean resizeNodesAfterConnections = false;
+boolean percentMaxNodeConnections = true;
 Node[] nodes;
 Connection connections;
 Utils Utils = new Utils();
@@ -101,6 +102,9 @@ int getIdAt(float x, float y) {
 void GenNewMap() {
   nodes = new Node[numNodes];
   connections = new Connection();
+  if (percentMaxNodeConnections) {
+    maxNodes = min(100, max(0, maxNodes));
+  }
   for (int i = 0; i < numNodes; i++) {
     nodes[i] = new Node(nodes, maxNodes, i, connections);
   }

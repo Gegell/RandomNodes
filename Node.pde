@@ -1,4 +1,4 @@
-class Node {
+class Node { //<>//
   Node allNodes[];
   Connection allConnections;
   int maxNumConnections;
@@ -9,18 +9,22 @@ class Node {
   PVector coord = new PVector();
   color generatedColor = color(random(230), random(230), random(230), random(150, 255));
   color nodeColor = generatedColor;
-  
-  Node(Node allNodes[], float maxConnections,int id, Connection connections) {
+
+  Node(Node allNodes[], float maxConnections, int id, Connection connections) {
     this.allNodes = allNodes;
-    this.maxNumConnections = int(random(maxConnections + 1));
+    if (!percentMaxNodeConnections) {
+      this.maxNumConnections = int(random(maxConnections + 1));
+    } else {
+      this.maxNumConnections = int(map(maxConnections, 0.0, 100.0, 0, numNodes - 1));
+    }
     this.id = id;
     this.allConnections = connections;
   }
-  
+
   void Update() {
     DrawNode();
   }
-  
+
   void DrawNode() {
     noStroke();
     fill(nodeColor);
@@ -30,32 +34,31 @@ class Node {
       type = 0;
     }
     switch (type) {
-      case 0:
-      default:
-        ellipse(coord.x, coord.y, nodeSize, nodeSize);
-        break;
-      case 1:
-        rect(coord.x, coord.y, nodeSize, nodeSize, 2);
-        break;
+    case 0:
+    default:
+      ellipse(coord.x, coord.y, nodeSize, nodeSize);
+      break;
+    case 1:
+      rect(coord.x, coord.y, nodeSize, nodeSize, 2);
+      break;
     }
   }
-  
+
   void SetNewConnections() {
     int newConnections = 0;
     int maxConnection = allNodes.length;
     int timeout = 0;
     while (connections.size() < maxNumConnections && !(timeout > maxConnection + 100)) {
       int newConnection = int(random(maxConnection));
-      if (newConnection != this.id) { //<>//
-        if(AddNewConnection(newConnection)) {;
+      if (newConnection != this.id) {
+        if (AddNewConnection(newConnection)) {
           timeout = 0;
         }
       }
       timeout++;
     }
-    
   }
-  
+
   boolean AddNewConnection(int newConnection) {
     int[] newConnectionList = {this.id, newConnection};
     if (allConnections.addConnection(newConnectionList)) {
@@ -65,7 +68,7 @@ class Node {
     }
     return false;
   }
-  
+
   boolean RemoveConnection(int oldConnection) {
     int[] newConnectionList = {this.id, oldConnection};
     if (allConnections.removeConnection(newConnectionList)) {
@@ -84,7 +87,7 @@ class Node {
     }
     return false;
   }
-  
+
   void SetNewPosition() {
     FindRandomPosition();
     int timeout = 0;
@@ -100,12 +103,12 @@ class Node {
       }
     }
   }
-  
+
   void FindRandomPosition() {
     this.coord.x = random(nodeSize / 2, width - nodeSize / 2);
     this.coord.y = random(nodeSize / 2, height - nodeSize / 2);
   }
-  
+
   boolean IsOverlapping(PVector coord, int diameter) {
     boolean overlapps = false;
     for (Node node : allNodes) {
@@ -116,7 +119,7 @@ class Node {
     }
     return overlapps;
   }
-  
+
   boolean IsInArray(int search, int[] toSearch) {
     boolean inArray = false;
     for (int pointer = 0; pointer < toSearch.length; pointer++) {

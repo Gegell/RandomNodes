@@ -1,15 +1,16 @@
-[h]1. Mouse Controll
+[h]1. Mouse Control
     [m]Edit mode: Selection:[t] Displays all stats but can't edit the nodes.
     [m]Edit mode Moving:[t] You can drag nodes around.
     [m]Edit mode: Connection:[t] Add / Remove connections by clicking on a node and the one you want to connect it to.
 
-[h]2. Keyboard Controll
+[h]2. Keyboard Control
     [kc]key_show_help[t] Shows / Hides this in-app help.
     [kc]key_reload_config[t] Reloads the config file.
     [kc]key_open_config_file[t] Opens the config file in your editor.
     [kc]key_reset_to_config[t] Sets the app values to the config values.
     [kc]key_file_import[t] Imports a saved scene from the save.txt file.
     [kc]key_file_export[t] Saves to the standart save directory. (Either as save.txt or save(n).txt)
+    [kc]key_toggle_edit_mode[t] Toggles throught all edit modes.
     [kc]key_toggle_information[t] Toggles the info overlay.
     [kc]key_toggle_resize_nodes[t] Resizes the nodes to their relative connection count.
     [kc]key_toggle_connections[t] Toggles the visibility of the node connections.
